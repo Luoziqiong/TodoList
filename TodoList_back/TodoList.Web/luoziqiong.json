@@ -1,0 +1,37 @@
+{
+  "NameString": "This is a string!",
+  "Books": [
+    {
+      "Id": 1,
+      "Name": "book1",
+      "Price": 30.0,
+      "Publisher": "whatpublisher",
+      "PublishDate": "2018-3-9",
+      "Description": "good"
+    },
+    {
+      "Id": 2,
+      "Name": "book2",
+      "Price": 30.0,
+      "Publisher": "whatpublisher",
+      "PublishDate": "2018-3-9",
+      "Description": "good"
+    },
+    {
+      "Id": 3,
+      "Name": "book3",
+      "Price": 30.0,
+      "Publisher": "whatpublisher",
+      "PublishDate": "2018-3-9",
+      "Description": "good"
+    },
+    {
+      "Id": 4,
+      "Name": "book4",
+      "Price": 30.0,
+      "Publisher": "whatpublisher",
+      "PublishDate": "2018-3-9",
+      "Description": "good"
+    }
+  ]
+}

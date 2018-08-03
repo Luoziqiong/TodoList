@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TodoList.Web</name>
+    </assembly>
+    <members>
+        <member name="M:TodoList.Web.Api.BookController.GetBookList(TodoList.Service.IBookService)">
+            <summary>
+            获取书籍列表
+            </summary>
+            <param name="bookService"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TodoList.Web.Api.BookController.GetBookDetail(TodoList.Service.IBookService,System.Int64)">
+            <summary>
+            获取书籍详情
+            </summary>
+            <param name="bookService"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TodoList.Web.Api.BookController.AddBook(TodoList.Service.IBookService,TodoList.Service.Dto.CreateBookDto)">
+            <summary>
+            添加书籍
+            </summary>
+            <param name="bookService"></param>
+            <param name="book"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TodoList.Web.Api.BookController.UpdateBook(TodoList.Service.IBookService,TodoList.Service.Dto.UpdateBookDto)">
+            <summary>
+            更新书籍
+            </summary>
+            <param name="bookService"></param>
+            <param name="book"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TodoList.Web.Api.BookController.DeleteBook(TodoList.Service.IBookService,System.Int64)">
+            <summary>
+            删除书籍
+            </summary>
+            <param name="bookService"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TodoList.Web.Startup.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:TodoList.Web.Startup.Configuration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:TodoList.Web.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:TodoList.Web.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+    </members>
+</doc>
