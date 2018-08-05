@@ -20,3 +20,14 @@ C:\Users\ThinkPad\Desktop\作业\其他\TodoList\TodoList.Repository\obj\Debug\n
 C:\Users\ThinkPad\Desktop\作业\其他\TodoList\TodoList.Repository\obj\Debug\netcoreapp2.1\TodoList.Repository.AssemblyInfo.cs
 C:\Users\ThinkPad\Desktop\作业\其他\TodoList\TodoList.Repository\obj\Debug\netcoreapp2.1\TodoList.Repository.dll
 C:\Users\ThinkPad\Desktop\作业\其他\TodoList\TodoList.Repository\obj\Debug\netcoreapp2.1\TodoList.Repository.pdb
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\bin\Debug\netcoreapp2.1\TodoList.Repository.deps.json
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\bin\Debug\netcoreapp2.1\TodoList.Repository.dll
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\bin\Debug\netcoreapp2.1\TodoList.Repository.pdb
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\obj\Debug\netcoreapp2.1\TodoList.Repository.csprojAssemblyReference.cache
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\obj\Debug\netcoreapp2.1\TodoList.Repository.csproj.CoreCompileInputs.cache
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\obj\Debug\netcoreapp2.1\TodoList.Repository.AssemblyInfoInputs.cache
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\obj\Debug\netcoreapp2.1\TodoList.Repository.AssemblyInfo.cs
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\obj\Debug\netcoreapp2.1\TodoList.Repository.dll
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\obj\Debug\netcoreapp2.1\TodoList.Repository.pdb
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\bin\Debug\netcoreapp2.1\TodoList.Repository.runtimeconfig.json
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Repository\bin\Debug\netcoreapp2.1\TodoList.Repository.runtimeconfig.dev.json

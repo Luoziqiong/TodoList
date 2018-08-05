@@ -11,7 +11,8 @@ namespace TodoList.Service.Dto
         public DateTime StartDate { get; set; }
         public DateTime FinishDate { get; set; }
         public int Priority { get; set; }
-        public string State { get; set; }
-        
+        public int State { get; set; }
+        public long UserId { get; set; }
+
     }
 }

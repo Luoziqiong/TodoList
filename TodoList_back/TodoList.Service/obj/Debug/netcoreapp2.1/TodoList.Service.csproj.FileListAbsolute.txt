@@ -26,3 +26,17 @@ C:\Users\ThinkPad\Desktop\作业\其他\TodoList\TodoList.Service\obj\Debug\netc
 C:\Users\ThinkPad\Desktop\作业\其他\TodoList\TodoList.Service\obj\Debug\netcoreapp2.1\TodoList.Service.csproj.CopyComplete
 C:\Users\ThinkPad\Desktop\作业\其他\TodoList\TodoList.Service\obj\Debug\netcoreapp2.1\TodoList.Service.dll
 C:\Users\ThinkPad\Desktop\作业\其他\TodoList\TodoList.Service\obj\Debug\netcoreapp2.1\TodoList.Service.pdb
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\obj\Debug\netcoreapp2.1\TodoList.Service.csprojAssemblyReference.cache
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\obj\Debug\netcoreapp2.1\TodoList.Service.csproj.CoreCompileInputs.cache
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\obj\Debug\netcoreapp2.1\TodoList.Service.AssemblyInfoInputs.cache
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\obj\Debug\netcoreapp2.1\TodoList.Service.AssemblyInfo.cs
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\obj\Debug\netcoreapp2.1\TodoList.Service.dll
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\obj\Debug\netcoreapp2.1\TodoList.Service.pdb
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\bin\Debug\netcoreapp2.1\TodoList.Service.deps.json
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\bin\Debug\netcoreapp2.1\TodoList.Service.dll
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\bin\Debug\netcoreapp2.1\TodoList.Service.pdb
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\bin\Debug\netcoreapp2.1\TodoList.Repository.dll
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\bin\Debug\netcoreapp2.1\TodoList.Repository.pdb
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\obj\Debug\netcoreapp2.1\TodoList.Service.csproj.CopyComplete
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\bin\Debug\netcoreapp2.1\TodoList.Service.runtimeconfig.json
+C:\Users\Administrator.ZVW5JAMYIHN1H27\Desktop\新建文件夹\新建文件夹\TodoList_back\TodoList.Service\bin\Debug\netcoreapp2.1\TodoList.Service.runtimeconfig.dev.json

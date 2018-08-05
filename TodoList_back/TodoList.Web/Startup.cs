@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,27 +10,17 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using TodoList.Repository;
 using TodoList.Service;
-using TodoList.Service.Dto;
 using TodoList.Service.Impl;
 
 namespace TodoList.Web
 {
     public class Startup
     {
-       /*public Startup(IConfiguration configuration)
+       public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-        }*/
-        /// <summary>
-        /// 
-        /// </summary>
-        public Startup()
-        {
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory());
-            builder.AddJsonFile("luoziqiong.json", true, true);
-            Configuration = builder.Build();
         }
+       
         /// <summary>
         /// 
         /// </summary>
@@ -80,53 +65,6 @@ namespace TodoList.Web
 
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<ITodoListService, TodoListService>();
-            services.AddScoped<IBookService, BookService>();
-
-            //瞬时，作用域，单例服务注入
-            services.AddTransient<ITransientService, TransientService>();
-            services.AddScoped<IScopedService, ScopedService>();
-            services.AddSingleton<ISingletonService, SingletonService>();
-
-            var provider = services.BuildServiceProvider();
-            var transient1 = provider.GetService<ITransientService>();
-            var transient2 = provider.GetService<ITransientService>();
-
-            Console.WriteLine($"transient1 guid;{transient1.MyGuid}");
-            Console.WriteLine($"transient2 guid;{transient2.MyGuid}");
-            Console.WriteLine();
-
-            var scoped1 = provider.GetService<IScopedService>();
-            var scoped2 = provider.GetService<IScopedService>();
-
-            Console.WriteLine($"scoped1 guid;{scoped1.MyGuid}");
-            Console.WriteLine($"scoped2 guid;{scoped2.MyGuid}");
-            Console.WriteLine();
-
-            var singleton1 = provider.GetService<ISingletonService>();
-            var singleton2 = provider.GetService<ISingletonService>();
-
-            Console.WriteLine($"singleton1 guid;{singleton1.MyGuid}");
-            Console.WriteLine($"singleton2 guid;{singleton2.MyGuid}");
-            Console.WriteLine();
-
-            //配置文件读取
-            //字符串读取
-            var NameStirng = Configuration.GetValue<string>("NameString");
-            Console.WriteLine(NameStirng);
-            Console.WriteLine();
-            //列表读取
-            var Books = Configuration.GetSection("Books").Get<List<BookDto>>();
-            foreach(var b in Books)
-            {
-                Console.WriteLine($"Id :{ b.Id}");
-                Console.WriteLine($"Name :{ b.Name}");
-                Console.WriteLine($"Description :{ b.Description}");
-                Console.WriteLine($"Price :${ b.Price}");
-                Console.WriteLine($"Publisher :{ b.Publisher}");
-                Console.WriteLine($"PublishDate :{ b.PublishDate}");
-                Console.WriteLine();
-            }
-            Console.WriteLine();
         }
         /// <summary>
         /// 
