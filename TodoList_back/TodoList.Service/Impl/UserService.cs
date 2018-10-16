@@ -1,11 +1,12 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TodoList.Repository;
 using TodoList.Repository.Entity;
-using TodoList.Service.Dto;
+using TodoList.Service.Dto.User;
 
 namespace TodoList.Service.Impl
 {
@@ -16,38 +17,59 @@ namespace TodoList.Service.Impl
         {
             this.todoListDbContext = todoListDbContext;
         }
-        //用户注册
-        public bool Register(UserDto user)
+        /// <summary>
+        /// 用户注册
+        /// </summary>
+        /// <param name="user">用户信息</param>
+        /// <returns>1 成功，0 插入出错，-1 已存在该用户</returns>
+        public int Register(UserDto user)
         {
-            todoListDbContext.Users.Add(new User()
+            //检验账号唯一性
+            var entity = todoListDbContext.Users.Where(o => o.Username == user.Username && o.Password == user.Password).FirstOrDefault();
+            if (entity == null)
             {
-                Username = user.Username,
-                Password = user.Password
-              
-            });
-            return todoListDbContext.SaveChanges() > 0; 
-
+                //添加账号  
+                using (var tran = todoListDbContext.Database.BeginTransaction())//开启事务
+                {
+                    try
+                    {
+                        var u = new User { Username = user.Username, Password = user.Password };
+                        todoListDbContext.Users.Add(u);
+                        todoListDbContext.SaveChanges();
+                        todoListDbContext.Todos.Add(new Todo { Content = "示例", UserId = u.Id });
+                        todoListDbContext.SaveChanges();
+                        tran.Commit();
+                        return 1;
+                    }
+                    catch (Exception e)
+                    {
+                        tran.Rollback();
+                        return 0;
+                        // TODO: Handle failure
+                    }
+                }
+            }
+            else
+            {
+                return -1;
+            }
         }
-
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="user">用户信息</param>
+        /// <returns>0 不存在，其他 用户id</returns>
         public long Login(UserDto user)
         {
-            var u = todoListDbContext.Users.Where(o => o.Username == user.Username && o.Password == user.Username).FirstOrDefault();
-            if (u == null)
+            var entity = todoListDbContext.Users.Where(o => o.Username == user.Username && o.Password == user.Password).FirstOrDefault();
+            if(entity == null)
             {
-                throw new Exception();
+                return 0;
             }
-            return u.Id;
-        }
-        public bool UpdatePassword(UpdateUserDto user)
-        {
-            var u = todoListDbContext.Users.Where(o => o.Id == user.Id && o.Password == user.OldPassword).FirstOrDefault();
-            if (u == null)
+            else
             {
-                throw new Exception();
+                return entity.Id;
             }
-
-            u.Password = user.NewPassword;
-            return todoListDbContext.SaveChanges() > 0 ;
         }
     }
 }

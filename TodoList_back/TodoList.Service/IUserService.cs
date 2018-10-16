@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TodoList.Service.Dto;
+using TodoList.Service.Dto.User;
 
 namespace TodoList.Service
 {
     public interface IUserService
     {
-        bool Register(UserDto user);
+        int Register(UserDto user);
         long Login(UserDto user);
-        bool UpdatePassword(UpdateUserDto user);
     }
 }

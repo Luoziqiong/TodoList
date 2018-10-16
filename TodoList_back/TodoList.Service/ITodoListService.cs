@@ -8,10 +8,9 @@ namespace TodoList.Service
 {
     public interface ITodoListService
     {
-        IEnumerable<TodoListDto> GetTodoListByPriority(long userId, int priority);
-        bool AddTodoList(CreateTodoListDto todo);
+        IEnumerable<TodoListDto> GetTodoList(long userId);
+        bool AddTodoList(long userId, string content,int priority);
         bool DeleteTodoList(long id);
-        bool EditTodoList(UpdateTodoListDto todo);
-        bool ChangeTodoState(UpdateTodoListDto todo);
+        bool EditTodoList(int id, string content, int priority);
     }
 }

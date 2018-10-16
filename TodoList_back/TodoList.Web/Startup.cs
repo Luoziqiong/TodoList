@@ -1,7 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,17 +15,24 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using TodoList.Repository;
 using TodoList.Service;
+using TodoList.Service.Dto;
 using TodoList.Service.Impl;
 
 namespace TodoList.Web
 {
     public class Startup
     {
-       public Startup(IConfiguration configuration)
+        /*public Startup(IConfiguration configuration)
+         {
+             Configuration = configuration;
+         }*/
+        /// <summary>
+        /// 
+        /// </summary>
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-       
         /// <summary>
         /// 
         /// </summary>
@@ -65,6 +77,7 @@ namespace TodoList.Web
 
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<ITodoListService, TodoListService>();
+            services.AddScoped<IBookService, BookService>();
         }
         /// <summary>
         /// 

@@ -13,6 +13,10 @@ namespace TodoList.Repository
 
         public TodoListDbContext(DbContextOptions<TodoListDbContext> options) : base(options)
         { }
+        ///<summary>
+        ///书籍
+        /// </summary>
+        public DbSet<BookEntity>  BookEnities{ set; get; }
         /// <summary>
         /// 待办事项
         /// </summary>
@@ -21,6 +25,11 @@ namespace TodoList.Repository
         /// 用户
         /// </summary>
         public DbSet<User> Users { set; get; }
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public DbSet<State> States { set; get; }
+
 
 
     }

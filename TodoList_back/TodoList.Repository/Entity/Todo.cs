@@ -42,7 +42,7 @@ namespace TodoList.Repository.Entity
         /// 状态Id
         /// </summary>
         [Required, DefaultValue(0)]
-        public int State { get; set; }
+        public long StateId { get; set; }
         /// <summary>
         /// 用户Id
         /// </summary>

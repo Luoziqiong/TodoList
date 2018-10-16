@@ -11,9 +11,6 @@ using TodoList.Service.Dto;
 
 namespace TodoList.Web.Api
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [Route("api/[controller]")]
     public class TodoListController : Controller
     {
@@ -26,9 +23,9 @@ namespace TodoList.Web.Api
         // GET: api/<controller>
         [HttpGet]
         [Route("GetTodoList")]
-        public IEnumerable<TodoListDto> GetTodoList([FromServices]ITodoListService todoListService, [FromQuery]SearchTodoListDto todo)
+        public IEnumerable<TodoListDto> GetTodoList([FromServices]ITodoListService todoListService, [FromQuery]long id)
         {
-            return todoListService.GetTodoListByPriority(todo.UserId,todo.Priority);
+            return todoListService.GetTodoList(id);
         }
         /// <summary>
         /// 添加待办事项
@@ -39,9 +36,9 @@ namespace TodoList.Web.Api
         // POST api/<controller>
         [HttpPost]
         [Route("AddTodoList")]
-        public bool AddTodoList([FromServices]ITodoListService todoListService, [FromBody]CreateTodoListDto todo)
+        public bool AddTodoList([FromServices]ITodoListService todoListService, [FromBody]Todo todo)
         {
-            return todoListService.AddTodoList(todo);
+            return todoListService.AddTodoList(todo.UserId, todo.Content,todo.Priority);
         }
         /// <summary>
         /// 更新待办事项内容
@@ -52,22 +49,9 @@ namespace TodoList.Web.Api
         // POST api/<controller>
         [HttpPost]
         [Route("EditTodoList")]
-        public bool EditTodoList([FromServices]ITodoListService todoListService, [FromBody]UpdateTodoListDto todo)
+        public bool EditTodoList([FromServices]ITodoListService todoListService, [FromBody]Todo todo)
         {
-            return todoListService.EditTodoList(todo);
-        }
-        /// <summary>
-        /// 改变待办事项状态
-        /// </summary>
-        /// <param name="todoListService"></param>
-        /// <param name="todo"></param>
-        /// <returns></returns>
-        // POST api/<controller>
-        [HttpPost]
-        [Route("ChangeTodoState")]
-        public bool ChangeTodoState([FromServices]ITodoListService todoListService, [FromBody]UpdateTodoListDto todo)
-        {
-            return todoListService.ChangeTodoState(todo);
+            return todoListService.EditTodoList(todo.Id, todo.Content,todo.Priority);
         }
         /// <summary>
         /// 删除待办事项
