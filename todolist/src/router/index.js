@@ -6,26 +6,25 @@ import Login from '@/pages/login.vue'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path:'/',
-      redirect:'/login',
+  routes: [{
+      path: '/',
+      redirect: '/login',
     },
     {
-      path:'/login',
-      name:'login',
-      component:Login
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
-      path:'/register',
-      name:'register',
-      component:Register
+      path: '/register',
+      name: 'register',
+      component: Register
     },
-    
+
     {
-      path:'/todolist',
-      name:'Todolist',
-      component:TodoList
+      path: '/todolist',
+      name: 'todolist',
+      component: TodoList
     }
   ]
 })

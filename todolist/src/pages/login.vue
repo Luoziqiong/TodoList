@@ -14,7 +14,7 @@
             <el-form-item prop="password">
                 <el-input type="password" v-model="loginForm.password" placeholder="密码"></el-input>
             </el-form-item>
-            <el-button type="primary" @click="login(loginForm)" class="loginbtn">登录</el-button>
+            <el-button type="primary" @click="login('loginForm')" class="loginbtn">登录</el-button>
         </el-form>
         <div class="to-register">
            <p>还没有账号？
@@ -24,6 +24,7 @@
     </div>
 </template>
 <script>
+import { mapMutations } from "vuex";
 var qs = require("qs");
 export default {
   data() {
@@ -36,36 +37,48 @@ export default {
       loginRules: {
         name: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
         ]
       }
     };
   },
   methods: {
+    ...mapMutations("user", ["changeLoginState"]),
     login(formName) {
-      var user = this.loginForm;
-      console.log(user);
-      // this.axios.get("/api/User", {
-      //     count: this.loginForm.count,
-      //     password: this.loginForm.password
-      //   })
-      //   .then(r => {
-      //     console.log(r);
-      //     if (r.data) {
-      //       this.$router.push({
-      //         path: "./todoList",
-      //         query: { userId: r.data }
-      //       });
-      //     } else {
-      //       alert("登录失败处理"); //失败处理
-      //     }
-      //   })
-      //   .catch(err => {});
-      this.$router.push({ path: "/todoList" });
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .get(
+              `/api/User/Login?Username=${this.loginForm.name}&Password=${
+                this.loginForm.password
+              }`
+            )
+            .then(r => {
+              // console.log(r);
+              if (r.data) {
+                // console.log(mapMutations);
+                this.changeLoginState(true);
+                this.$router.push({
+                  name: "todolist",
+                  query: { userId: r.data }
+                });
+              } else {
+                this.$message({
+                  message: "登录失败处理!",
+                  type: "error"
+                }); //失败处理
+              }
+            })
+            .catch(err => {});
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     toRegister() {
       this.$router.push({ path: "/register" });

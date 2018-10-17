@@ -12,9 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        //target: 'http://47.95.222.102/',
-        //target:'http://225e14fa.ngrok.io',
-        target: 'http://localhost:44372',
+        target: 'http://localhost:57834',
         changeOrigin: true,
       },
     },

@@ -14,7 +14,7 @@
                 <el-input type="password" v-model="registerForm.password" placeholder="密码"></el-input>
             </el-form-item>
             
-            <el-button type="primary" @click="register(registerForm)" class="registerBtn">注册</el-button>
+            <el-button type="primary" @click="register('registerForm')" class="registerBtn">注册</el-button>
         </el-form>
         <div class="to-login">
            <p>已经有账号？ <el-button class="login" type="text" @click="toLogin">直接登录>></el-button></p>
@@ -35,36 +35,49 @@ export default {
       registerRules: {
         name: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
         ]
       }
     };
   },
   methods: {
     register(formName) {
-      var user = this.loginForm;
-      // this.axios.post(
-      //     "/api/user",
-      //    {
-      //       count: this.loginForm.count,
-      //       password: this.loginForm.password
-      //     }
-      //   )
-      //   .then(r => {
-      //     console.log(r);
-      //     if (r.data === 1) {
-      //       this.$message.suceess("注册成功处理");
-      //     } else if (res.data === -1) {
-      //        this.$message.error("该账户已存在"); //失败处理
-      //     } else {
-      //        this.$message.error("注册失败处理"); //失败处理
-      //     }
-      //   })
-      //   .catch(err => {});
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.axios
+            .post("/api/User/Register", {
+              Username: this.registerForm.name,
+              Password: this.registerForm.password
+            })
+            .then(r => {
+              console.log(r);
+              if (r.data == 1) {
+                this.$message({
+                  message: "注册成功!",
+                  type: "suceess"
+                });
+              } else if (r.data == -1) {
+                this.$message({
+                  message: "该账户已存在!",
+                  type: "error"
+                }); //失败处理
+              } else {
+                this.$message({
+                  message: "注册失败处理!",
+                  type: "error"
+                }); //失败处理
+              }
+            })
+            .catch(err => {});
+        } else {
+          console.log("");
+          return false;
+        }
+      });
     },
     toLogin() {
       this.$router.push({ path: "/login" });
@@ -82,15 +95,15 @@ export default {
   background: #fff;
   box-shadow: 1px 1px 10px 0 #979797;
 }
-.title{
+.title {
   margin-top: 0;
-  color:#398bdd;
+  color: #398bdd;
   font-weight: 400;
 }
-p{
-  font-size:14px;
+p {
+  font-size: 14px;
 }
-.registerBtn{
-  width:100%;
+.registerBtn {
+  width: 100%;
 }
 </style>

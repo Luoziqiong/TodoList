@@ -13,10 +13,6 @@ namespace TodoList.Repository
 
         public TodoListDbContext(DbContextOptions<TodoListDbContext> options) : base(options)
         { }
-        ///<summary>
-        ///书籍
-        /// </summary>
-        public DbSet<BookEntity>  BookEnities{ set; get; }
         /// <summary>
         /// 待办事项
         /// </summary>

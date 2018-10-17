@@ -11,6 +11,7 @@ using TodoList.Service.Dto;
 using Microsoft.EntityFrameworkCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
+using TodoList.Service.Dto.TodoList;
 
 namespace TodoList.Service.Impl
 {
@@ -26,10 +27,67 @@ namespace TodoList.Service.Impl
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public IEnumerable<TodoListDto> GetTodoList(long userId)
+        public IEnumerable<TodoDto> GetTodoList(SearchTodosDto condition)
         {
-            var sqlString = $"select * from  lzq_todolist as t inner join lzq_state as s on t.StateId = s.Id where s.UserId = @UserId";
-            var todolist = todoListDbContext.Set<TodoListDto>().FromSql(sqlString,new SqlParameter("@UserId", userId)).ToList();
+            var todolist = new List<TodoDto>();
+            if (condition.Priority == 0&&condition.StateId == 0)
+            {
+                todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.StartDate 
+                && o.UserId == condition.UserId).Select(o => new TodoDto()
+                {
+                    Id = o.Id,
+                    Content = o.Content,
+                    StartDate = o.StartDate,
+                    FinishDate = o.FinishDate,
+                    Priority = o.Priority,
+                    StateId = o.StateId,
+                }).ToList();
+
+            }
+            else if(condition.Priority == 0)
+            {
+                todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.StartDate
+                && o.UserId == condition.UserId && o.StateId == condition.StateId)
+                    .Select(o => new TodoDto()
+                    {
+                        Id = o.Id,
+                        Content = o.Content,
+                        StartDate = o.StartDate,
+                        FinishDate = o.FinishDate,
+                        Priority = o.Priority,
+                        StateId = o.StateId,
+                    }).ToList();
+
+            }
+            else if(condition.StateId == 0)
+            {
+                todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.StartDate
+                && o.UserId == condition.UserId && o.Priority == condition.Priority)
+                    .Select(o => new TodoDto()
+                    {
+                        Id = o.Id,
+                        Content = o.Content,
+                        StartDate = o.StartDate,
+                        FinishDate = o.FinishDate,
+                        Priority = o.Priority,
+                        StateId = o.StateId,
+                    }).ToList();
+
+            }
+            else
+            {
+                todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.StartDate
+                && o.UserId == condition.UserId && o.StateId == condition.StateId && o.Priority == condition.Priority)
+                    .Select(o => new TodoDto()
+                    {
+                        Id = o.Id,
+                        Content = o.Content,
+                        StartDate = o.StartDate,
+                        FinishDate = o.FinishDate,
+                        Priority = o.Priority,
+                        StateId = o.StateId,
+                }).ToList();
+            }
             return todolist;
         }
         /// <summary>
@@ -39,60 +97,62 @@ namespace TodoList.Service.Impl
         /// <returns></returns>
         public bool DeleteTodoList(long id)
         {
-            var todo = todoListDbContext.Todos.Where(o => o.Id == id).FirstOrDefault();
-            return true;
+            var entity = todoListDbContext.Todos.Where(o => o.Id == id).FirstOrDefault();
+            if (entity == null)
+            {
+                throw new Exception();
+            }
+            todoListDbContext.Todos.Remove(entity);
+            return todoListDbContext.SaveChanges() > 0;
         }
         /// <summary>
         /// 添加代办事项
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="content"></param>
-        /// <param name="priority"></param>
+        /// <param name="todo"></param>
         /// <returns></returns>
-        public bool AddTodoList(long userId,string content,int priority)
+        public bool AddTodoList(CreateTodoDto todo)
         {
-            List<Todo> list = new List<Todo>();
-            // 数据库连接字符串
-            var connStr = "server=192.168.50.208;port=3306;Initial Catalog=training;user id=training;password=123456;ConnectionReset=false;SslMode = none;";
-            // connection
-            using (var conn = new MySqlConnection(connStr))
-            {
-                conn.Open();
-                var cmd = conn.CreateCommand();
-                cmd.CommandText = $"INSERT INTO `lzq_todolist` (`content`, `userId`,`priority`) VALUES (@content, @userId,@priority)";
-                cmd.Parameters.Add(new MySqlParameter("@content", content));
-                cmd.Parameters.Add(new MySqlParameter("@userId", userId));
-                cmd.Parameters.Add(new MySqlParameter("@priority", priority));
-                cmd.ExecuteNonQuery();
-               
-            }
-            return true;
+            todoListDbContext.Todos.Add(new Todo {
+                Content = todo.Content,
+                Priority =todo.Priority,
+                UserId = todo.UserId,
+                StartDate = todo.StartDate,
+                FinishDate = todo.FinishDate
+            });
+            return todoListDbContext.SaveChanges() > 0;
         }
         /// <summary>
         /// 编辑代办事项
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="content"></param>
-        /// <param name="priority"></param>
+        /// <param name="todo"></param>
         /// <returns></returns>
-        public bool EditTodoList(int id, string content, int priority)
+        public bool EditTodoList(UpdateTodoDto todo)
         {
-            List<Todo> list = new List<Todo>();
-            // 数据库连接字符串
-            var connStr = "server=192.168.50.208;port=3306;Initial Catalog=training;user id=training;password=123456;ConnectionReset=false;SslMode = none;";
-            // connection
-            using (var conn = new MySqlConnection(connStr))
+            var entity = todoListDbContext.Todos.Where(o => o.Id == todo.Id).FirstOrDefault();
+            if (entity == null)
             {
-                conn.Open();
-                var cmd = conn.CreateCommand();
-                cmd.CommandText = $"update lzq_todolist set content = @content,priority= @priority where id = @Id";
-                cmd.Parameters.Add(new MySqlParameter("@content", content));
-                cmd.Parameters.Add(new MySqlParameter("@Id", id));
-                cmd.Parameters.Add(new MySqlParameter("@priority", priority));
-                cmd.ExecuteNonQuery();
-
+                throw new Exception();
             }
-            return true;
+            entity.Content = todo.Content;
+            entity.Priority = todo.Priority;
+            entity.StartDate = todo.StartDate;
+            entity.FinishDate = todo.FinishDate;
+            return todoListDbContext.SaveChanges() > 0;
+        }
+        /// <summary>
+        /// 改变待办事项状态
+        /// </summary>
+        /// <param name="todo"></param>
+        /// <returns></returns>
+        public bool UpdateTodoListState(UpdateTodoStateDto todo)
+        {
+            var entity = todoListDbContext.Todos.Where(o => o.Id == todo.Id).FirstOrDefault();
+            if (entity == null)
+            {
+                throw new Exception();
+            }
+            entity.StateId = todo.StateId;
+            return todoListDbContext.SaveChanges() > 0;
         }
     }
 }

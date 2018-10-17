@@ -34,9 +34,11 @@ namespace TodoList.Service.Impl
                     try
                     {
                         var u = new User { Username = user.Username, Password = user.Password };
+                        //添加用户
                         todoListDbContext.Users.Add(u);
                         todoListDbContext.SaveChanges();
-                        todoListDbContext.Todos.Add(new Todo { Content = "示例", UserId = u.Id });
+                        //添加实例
+                        todoListDbContext.Todos.Add(new Todo { Content = "示例",Priority=1, UserId = u.Id });
                         todoListDbContext.SaveChanges();
                         tran.Commit();
                         return 1;

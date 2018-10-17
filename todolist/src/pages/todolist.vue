@@ -3,7 +3,7 @@
         <el-container>
           <el-aside width="170px">
             <el-menu
-              :default-active="active"
+              :default-active="priority"
               class="el-menu-vertical-demo" 
               background-color="#0758ad"
               text-color="#fff"
@@ -62,7 +62,7 @@
              <el-collapse accordion>
                 <el-collapse-item v-for="(item,index) in todoData" :key="index">
                   <template slot="title">
-                    <input type="checkbox" :id="item.id" :checked="item.state===1" 
+                    <input type="checkbox" :id="item.id" :checked="item.stateId===2" 
                     @change="changeState(index,item)"/>
                     <label class="label"
                     :class="{'red-label':item.priority === 1,
@@ -79,7 +79,7 @@
                     </span>
                     <span class="endDate">
                        <i class="el-icon-date"></i>
-                      截止时间：{{item.endDate}}
+                      截止时间：{{item.finishDate}}
                     </span>
                   </div>
                   <div class="footer">
@@ -112,12 +112,12 @@
                   </el-col>
                   <el-col class="line" :span="2">-</el-col>
                   <el-col :span="11">
-                    <el-date-picker type="date" placeholder="选择截止日期" v-model="todoForm.endDate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker type="date" placeholder="选择截止日期" v-model="todoForm.finishDate" style="width: 100%;"></el-date-picker>
                   </el-col>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="submitTodo" size="small">确 定</el-button>
+              <el-button type="primary" @click="submitTodo('todoForm')" size="small">确 定</el-button>
               <el-button @click="cancel" size="small">取 消</el-button>
             </div>
         </el-dialog>
@@ -132,51 +132,18 @@ export default {
   },
   data() {
     return {
-      active: "1",
-      newContent: "",
+      userId: 0,
+      priority: "1",
       todoForm: {},
-      ieVal:1,
-      inVal:2,
-      neVal:3,
-      nnVal:4,
-      radio:'日',
-      dateTime:'',
-      today:new Date(),
-      todoData: [
-        {
-          id: 0,
-          content: "11111111",
-          state: 0,
-          priority: 1,
-          startDate: "2018-7-7 10:00:00",
-          endDate: "2015-5-6 10:00:00"
-        },
-        {
-          id: 1,
-          content: "11111111",
-          state: 1,
-          priority: 2,
-          startDate: "2018-7-7 10:00:00",
-          endDate: "2015-5-6 10:00:00"
-        },
-        {
-          id: 2,
-          content: "11111111",
-          state: 0,
-          priority: 3,
-          startDate: "2018-7-7 10:00:00",
-          endDate: "2015-5-6 10:00:00"
-        },
-        {
-          id: 3,
-          content: "11111111",
-          state: 0,
-          priority: 4,
-          startDate: "2018-7-7 10:00:00",
-          endDate: "2015-5-6 10:00:00"
-        }
-      ],
-      state: 1,
+      ieVal: 1, //重要-紧急
+      inVal: 2, //重要-不紧急
+      neVal: 3, //不重要-紧急
+      nnVal: 4, //不重要-不紧急
+      radio: "日",
+      dateTime: "",
+      today: new Date(),
+      todoData: [],
+      state: 0,
       options: [
         {
           value: 0,
@@ -184,119 +151,208 @@ export default {
         },
         {
           value: 1,
-          label: "已完成"
+          label: "未完成"
         },
         {
           value: 2,
-          label: "未完成"
+          label: "已完成"
         }
       ],
       userId: 0,
       dialogTitle: "",
-      dialogVisible: false
+      dialogVisible: false,
+      // 编辑状态描述
+      isEdit: false,
+      editId: 0
     };
   },
   created() {
-    //let userId = this.$router.query.userId;
-    //console.log(userId);
+    this.userId = this.$route.query.userId;
     let date = new Date();
     this.dateTime = this.formateDate(this.today);
-    
+    // 请求列表数据
+    this.getData();
   },
   methods: {
+    // 状态筛选项改变
     handleStateChange(val) {
-      console.log(val);
+      this.getData();
+      // console.log(val);
     },
+    // 新增
     add() {
       this.dialogTitle = "新增TodoList";
       this.dialogVisible = true;
     },
+    // 优先级筛选项改变
     handleSelect(index) {
       console.log(index);
-      this.active = index;
-      console.log(this.active);
+      this.priority = index;
+      this.getData();
+      console.log(this.priority);
     },
-    handleSelectChange(){
+    // 日周月选择
+    handleSelectChange() {
       console.log(this.radio);
       this.dateTime = this.formateDate(this.today);
     },
-    changeState(index,item){
+    // 改变状态
+    changeState(index, item) {
       // console.log(item);
-      if(item.state === 1){
-        item.state = 0;
+      let state = 0;
+      if (item.stateId === 1) {
+        state = 2;
+      } else if (item.stateId === 2) {
+        state = 1;
       }
-      else if(item.state === 0){
-        item.state = 1;
-      }
-      this.todoData.splice(index,1,item);
+      this.axios
+        .post("/api/TodoList/UpdateTodoListState", {
+          id: item.id,
+          stateId: state
+        })
+        .then(r => {
+          this.getData();
+        })
+        .catch(err => {});
     },
-    submitTodo() {
-      this.dialogVisible = false;
-      this.todoForm={};
+    // 编辑或新增提交
+    submitTodo(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (!this.isEdit) {
+            this.axios
+              .post("/api/TodoList/AddTodoList", {
+                content: this.todoForm.content,
+                startDate: this.todoForm.startDate,
+                finishDate: this.todoForm.finishDate,
+                priority: this.todoForm.priority,
+                userId: this.userId
+              })
+              .then(r => {
+                this.$message({
+                  type: "success",
+                  message: "新增成功!"
+                });
+              })
+              .catch(err => {
+                this.$message({
+                  type: "error",
+                  message: "新增失败!"
+                });
+              });
+          } else {
+            this.axios
+              .post("/api/TodoList/EditTodoList", {
+                id: this.editId,
+                content: this.todoForm.content,
+                startDate: this.todoForm.startDate,
+                finishDate: this.todoForm.finishDate,
+                priority: this.todoForm.priority
+              })
+              .then(r => {
+                this.$message({
+                  type: "success",
+                  message: "修改成功!"
+                });
+              })
+              .catch(err => {
+                this.$message({
+                  type: "error",
+                  message: "修改失败!"
+                });
+              });
+            this.isEdit = false;
+          }
+          this.getData();
+          this.dialogVisible = false;
+          this.todoForm = {};
+        } else {
+          return false;
+        }
+      });
     },
-    cancel(){
+    cancel() {
       this.dialogVisible = false;
-      this.todoForm={};
+      this.todoForm = {};
     },
     edit(index) {
       this.dialogTitle = "修改TodoList";
       this.dialogVisible = true;
       let todo = this.todoData[index];
-      console.log(todo);
+      // console.log(todo);
       this.todoForm.content = todo.content;
       this.todoForm.startDate = todo.startDate;
-      this.todoForm.endDate = todo.endDate;
+      this.todoForm.finishDate = todo.finishDate;
       this.todoForm.priority = todo.priority;
+      this.isEdit = true;
+      this.editId = todo.id;
     },
     del(id) {
-      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.axios
+            .post(
+              "/api/TodoList/DeleteTodoList",
+              qs.stringify({
+                id: id
+              })
+            )
+            .then(r => {
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+              this.getData();
+            })
+            .catch(err => {});
+        })
+        .catch(() => {
           this.$message({
-            type: 'success',
-            message: '删除成功!'
+            type: "info",
+            message: "已取消删除"
           });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
         });
     },
-    prev(){
-
-    },
-    next(){
-
-    },
-    formateDate(date){
-      if(this.radio === '日'){
-        return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-      }
-      else if(this.radio === '月'){
-        return `${date.getFullYear()}-${date.getMonth()+1}`;
-      }else{
+    prev() {},
+    next() {},
+    formateDate(date) {
+      if (this.radio === "日") {
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      } else if (this.radio === "月") {
+        return `${date.getFullYear()}-${date.getMonth() + 1}`;
+      } else {
         let d = date.getDay();
-        let firstDate = new Date(date.getFullYear(),date.getMonth(),date.getDate() +1 - d);
-        let lastDate = new Date(date.getFullYear(),date.getMonth(),date.getDate() +8 - d);        
-        return `${firstDate.getFullYear()}-${firstDate.getMonth()+1}-${firstDate.getDate()}~${lastDate.getDate()+7}`;
+        let firstDate = new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate() + 1 - d
+        );
+        let lastDate = new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate() + 8 - d
+        );
+        return `${firstDate.getFullYear()}-${firstDate.getMonth() +
+          1}-${firstDate.getDate()}~${lastDate.getDate() + 7}`;
       }
     },
     getData() {
-      // this.$axios
-      //   .get("/api/todolist/", qs.stringify({ userId: this.userId }))
-      //   .then(r => {
-      //     console.log(r);
-      //     if(r.data){
-      //         this.$message.success("新增成功");
-      //     }
-      //     else{
-      //         this.$message.error("新增失败");
-      //     }
-      //   })
-      //   .catch(err => {});
+      this.axios
+        .post("/api/TodoList/GetTodoList", {
+          startDate: this.startDate,
+          priority: this.priority,
+          stateId: this.state,
+          userId: this.userId
+        })
+        .then(r => {
+          // console.log(r);
+          this.todoData = r.data;
+        })
+        .catch(err => {});
     }
   }
 };
@@ -316,7 +372,7 @@ export default {
 .state {
   width: 87px;
 }
-.title{
+.title {
   text-align: left;
 }
 .title-left {
@@ -352,7 +408,6 @@ export default {
 .footer {
   margin-right: 25px;
   text-align: right;
-  
 }
 .label {
   display: inline-block;
@@ -360,7 +415,6 @@ export default {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  
 }
 .red-label {
   border: 2px solid #ff4a0e;
@@ -394,22 +448,22 @@ input[type="checkbox"]:checked + .bule-label {
 input[type="checkbox"]:checked + .green-label {
   background: url(../assets/i-green.png) center no-repeat;
 }
-.startDate{
+.startDate {
   display: inline-block;
   vertical-align: middle;
   margin-left: 25px;
 }
-.endDate{
+.endDate {
   display: inline-block;
   vertical-align: middle;
   margin-left: 100px;
 }
-.dateTime{
+.dateTime {
   display: inline-block;
   vertical-align: middle;
   width: 110px;
 }
-.el-button--text{
+.el-button--text {
   vertical-align: middle;
   font-size: 20px;
 }

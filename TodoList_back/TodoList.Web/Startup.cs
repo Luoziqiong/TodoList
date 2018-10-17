@@ -77,7 +77,6 @@ namespace TodoList.Web
 
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<ITodoListService, TodoListService>();
-            services.AddScoped<IBookService, BookService>();
         }
         /// <summary>
         /// 

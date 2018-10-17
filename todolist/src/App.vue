@@ -4,7 +4,7 @@
       <el-header height="50px">
         <el-row :gutter="20">
           <el-col :span="3" class="logo">TODOLIST</el-col>
-          <el-col :span="2" class="user" v-if="isLogin">
+          <el-col :span="2" class="user" v-show="isLogin">
             <el-dropdown placement="bottom" size="medium" @command="handleCommand">
               <span class="el-dropdown-link">
                  <img src="./assets/logo.png" alt="userImg" class="userImg">
@@ -43,16 +43,20 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from "vuex";
 export default {
   name: "App",
   data() {
     return {
-      isLogin: true,
-      dialogVisible:false,
-      updatePswdForm:{}
+      dialogVisible: false,
+      updatePswdForm: {}
     };
   },
+  computed: mapState({
+    isLogin: state => state.user.isLogin
+  }),
   methods: {
+    ...mapMutations("user", ["changeLoginState"]),
     handleCommand(cmd) {
       switch (cmd) {
         case "logout":
@@ -64,16 +68,16 @@ export default {
       }
     },
     logout() {
+      this.changeLoginState(false);
       this.$router.push({ path: "/login" });
     },
     updatePswd() {
       this.dialogVisible = true;
     },
-    submitUpdate(){
+    submitUpdate() {
       this.dialogVisible = false;
-
     },
-    cancel(){
+    cancel() {
       this.dialogVisible = false;
     }
   }
