@@ -9,7 +9,11 @@ namespace TodoList.Service.Dto.TodoList
         /// <summary>
         /// 开始时间
         /// </summary>
-        public DateTime StartDate { get; set; }
+        public DateTime BeginTime { get; set; }
+        /// <summary>
+        /// 结束时间
+        /// </summary>
+        public DateTime EndTime { get; set; }
         /// <summary>
         /// 优先级
         /// </summary>

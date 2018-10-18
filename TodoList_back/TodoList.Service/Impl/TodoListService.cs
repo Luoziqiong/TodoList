@@ -15,7 +15,7 @@ using TodoList.Service.Dto.TodoList;
 
 namespace TodoList.Service.Impl
 {
-    public class TodoListService:BaseService<Todo>,ITodoListService
+    public class TodoListService : BaseService<Todo>, ITodoListService
     {
         private readonly TodoListDbContext todoListDbContext;
         public TodoListService(TodoListDbContext todoListDbContext)
@@ -30,24 +30,42 @@ namespace TodoList.Service.Impl
         public IEnumerable<TodoDto> GetTodoList(SearchTodosDto condition)
         {
             var todolist = new List<TodoDto>();
-            if (condition.Priority == 0&&condition.StateId == 0)
+            if (condition.Priority == 0 && condition.StateId == 0)
             {
-                todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.StartDate 
-                && o.UserId == condition.UserId).Select(o => new TodoDto()
+                if (condition.BeginTime != condition.EndTime)
                 {
-                    Id = o.Id,
-                    Content = o.Content,
-                    StartDate = o.StartDate,
-                    FinishDate = o.FinishDate,
-                    Priority = o.Priority,
-                    StateId = o.StateId,
-                }).ToList();
+                    todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.BeginTime
+                    && o.StartDate <= condition.EndTime && o.UserId == condition.UserId).Select(o => new TodoDto()
+                    {
+                        Id = o.Id,
+                        Content = o.Content,
+                        StartDate = o.StartDate,
+                        FinishDate = o.FinishDate,
+                        Priority = o.Priority,
+                        StateId = o.StateId,
+                    }).ToList();
+                }
+                else
+                {
+                    todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.BeginTime
+                     && o.UserId == condition.UserId).Select(o => new TodoDto()
+                     {
+                         Id = o.Id,
+                         Content = o.Content,
+                         StartDate = o.StartDate,
+                         FinishDate = o.FinishDate,
+                         Priority = o.Priority,
+                         StateId = o.StateId,
+                     }).ToList();
+                }
+
 
             }
-            else if(condition.Priority == 0)
+            else if (condition.Priority == 0)
             {
-                todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.StartDate
-                && o.UserId == condition.UserId && o.StateId == condition.StateId)
+                if (condition.BeginTime != condition.EndTime)
+                {
+                    todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.BeginTime && o.StartDate <= condition.EndTime && o.UserId == condition.UserId && o.StateId == condition.StateId)
                     .Select(o => new TodoDto()
                     {
                         Id = o.Id,
@@ -57,11 +75,40 @@ namespace TodoList.Service.Impl
                         Priority = o.Priority,
                         StateId = o.StateId,
                     }).ToList();
+                }
+                else
+                {
+                    todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.BeginTime && o.UserId == condition.UserId && o.StateId == condition.StateId)
+                    .Select(o => new TodoDto()
+                    {
+                        Id = o.Id,
+                        Content = o.Content,
+                        StartDate = o.StartDate,
+                        FinishDate = o.FinishDate,
+                        Priority = o.Priority,
+                        StateId = o.StateId,
+                    }).ToList();
+                }
 
             }
-            else if(condition.StateId == 0)
+            else if (condition.StateId == 0)
             {
-                todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.StartDate
+                if (condition.BeginTime != condition.EndTime)
+                {
+                    todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.BeginTime && o.StartDate <= condition.EndTime && o.UserId == condition.UserId && o.Priority == condition.Priority)
+                .Select(o => new TodoDto()
+                {
+                    Id = o.Id,
+                    Content = o.Content,
+                    StartDate = o.StartDate,
+                    FinishDate = o.FinishDate,
+                    Priority = o.Priority,
+                    StateId = o.StateId,
+                }).ToList();
+                }
+                else
+                {
+                    todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.BeginTime
                 && o.UserId == condition.UserId && o.Priority == condition.Priority)
                     .Select(o => new TodoDto()
                     {
@@ -72,21 +119,40 @@ namespace TodoList.Service.Impl
                         Priority = o.Priority,
                         StateId = o.StateId,
                     }).ToList();
+                }
 
             }
             else
             {
-                todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.StartDate
-                && o.UserId == condition.UserId && o.StateId == condition.StateId && o.Priority == condition.Priority)
-                    .Select(o => new TodoDto()
-                    {
-                        Id = o.Id,
-                        Content = o.Content,
-                        StartDate = o.StartDate,
-                        FinishDate = o.FinishDate,
-                        Priority = o.Priority,
-                        StateId = o.StateId,
-                }).ToList();
+                if (condition.BeginTime != condition.EndTime)
+                {
+                    todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.BeginTime
+                    && o.StartDate <= condition.EndTime
+                    && o.UserId == condition.UserId && o.StateId == condition.StateId && o.Priority == condition.Priority)
+                        .Select(o => new TodoDto()
+                        {
+                            Id = o.Id,
+                            Content = o.Content,
+                            StartDate = o.StartDate,
+                            FinishDate = o.FinishDate,
+                            Priority = o.Priority,
+                            StateId = o.StateId,
+                        }).ToList();
+                }
+                else
+                {
+                    todolist = todoListDbContext.Todos.Where(o => o.StartDate >= condition.BeginTime
+                            && o.UserId == condition.UserId && o.StateId == condition.StateId && o.Priority == condition.Priority)
+                                .Select(o => new TodoDto()
+                                {
+                                    Id = o.Id,
+                                    Content = o.Content,
+                                    StartDate = o.StartDate,
+                                    FinishDate = o.FinishDate,
+                                    Priority = o.Priority,
+                                    StateId = o.StateId,
+                                }).ToList();
+                }
             }
             return todolist;
         }
@@ -112,9 +178,10 @@ namespace TodoList.Service.Impl
         /// <returns></returns>
         public bool AddTodoList(CreateTodoDto todo)
         {
-            todoListDbContext.Todos.Add(new Todo {
+            todoListDbContext.Todos.Add(new Todo
+            {
                 Content = todo.Content,
-                Priority =todo.Priority,
+                Priority = todo.Priority,
                 UserId = todo.UserId,
                 StartDate = todo.StartDate,
                 FinishDate = todo.FinishDate
